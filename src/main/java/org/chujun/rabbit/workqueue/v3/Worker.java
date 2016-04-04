@@ -48,7 +48,7 @@ public class Worker {
                 }
             }
         };
-        channel.basicConsume(QUEUE_NAME,true,consumer);
+        channel.basicConsume(QUEUE_NAME,false,consumer);
     }
 
     /**
