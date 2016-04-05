@@ -14,6 +14,12 @@ import java.util.concurrent.TimeoutException;
  * 确保消息不会丢失需要做两件事情:我们需要同时确保队列和消息都是持久化的.
  * 首先,我们需要确保RabbitMq不会丢失我们的队列.为了这么做我们需要确保队列是持久化的.
  *
+ *
+ * 关于消息持久化说明
+ * 标记消息为持久化的并不能完全保证消息不会丢失.尽管他告诉RabbitMq保存消息到硬盘中去,但这里仍有一个小的时间窗口:
+ * 当RabbitMq已经接受了消息,然而还没有保存它.
+ * 另外,RabbitMq不会为所有消息调用fsync(2)--这导致消息可能仅仅只是存储到缓存中去而没有真正写到硬盘中去.
+ * 持久化保证不是强有力的,但是对我们简单的任务队列是足够的了.如果你需要更强保证,你可以使用发布者确认机制(publisher confirms).
  */
 public class Worker {
     public static final String QUEUE_NAME="durable work queues";
