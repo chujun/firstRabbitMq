@@ -45,9 +45,13 @@ import java.util.concurrent.TimeoutException;
  *
  *
  * 临时队列
+ * 需求1:无论何时连接RabbitMq,都需要一个新生的空队列.为了做到这一点,我们可以创建一个随机名的队列.
+ * 更好的方式:让RabbitMq为我们选择随机的队列名.
+ * 需求2:一旦我们断开消费者,队列自动删除.
+ * 如下代码实现:
+ * String queueName = channel.queueDeclare().getQueue();
  */
 public class EmitLoger {
-    public static final String QUEUE_NAME="work queues";
 
     public static final String EXCHANGE_NAME="logs";
 
@@ -64,7 +68,7 @@ public class EmitLoger {
 
         channel.exchangeDeclare(EXCHANGE_NAME,EXCHANGE_TYPE);
         //无需再申明queue
-        int messageCount=10;
+        int messageCount=10000;
         for(int i=0;i<messageCount;i++){
             String message=getMessage(new Date()+messageMain+(count++));
             channel.basicPublish(EXCHANGE_NAME,"",null,message.getBytes());
