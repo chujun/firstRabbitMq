@@ -34,6 +34,7 @@ public class ReceiveLogsDirect {
         System.out.println("random queueName:"+queueName);
 
         //bind
+        //Subscribing
         for(String severity:SEVERITYS){
             channel.queueBind(queueName,EXCHANGE_NAME,severity);
         }

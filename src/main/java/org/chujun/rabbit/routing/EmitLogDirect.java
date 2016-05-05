@@ -10,6 +10,14 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * Created by chujun on 16/5/5.
+ * routingKey依赖于exchange type.
+ * channel.queueBind(queueName, EXCHANGE_NAME, "black");
+ * 对于fanout将忽视routingKey.灵活性比较差,它只能广播消息.
+ * 而对于Direct exchange,会依据routingKey来路由.
+ * 基于Direct exchange的算法是简单的:消息发送到binding key匹配消息routing key的队列.
+ * (不匹配的消息将被丢弃)
+ * 2.Multiple bindings
+ * 这是合法的:同一个binding key绑定到多个队列中,
  */
 public class EmitLogDirect {
     public static final String EXCHANGE_NAME="logs-severity";
@@ -34,6 +42,7 @@ public class EmitLogDirect {
         for(int i=0;i<messageCount;i++){
             String message=getMessage(new Date()+messageMain+(count++));
             String severity = getSeverity(i);
+            //routing key
             channel.basicPublish(EXCHANGE_NAME,severity,null,message.getBytes());
             System.out.println("send ["+severity+"]:'"+message+"'");
         }
