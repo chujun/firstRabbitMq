@@ -46,8 +46,8 @@ public class ReceiveLogsDirect {
             public void handleDelivery(String consumerTag,Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body) throws IOException{
                 String message=new String(body,"UTF-8");
-                System.out.println("[x] Received "+envelope.getRoutingKey()+":'"+message+"'");
                 try {
+                    System.out.println("[x] Received "+envelope.getRoutingKey()+":'"+message+"'");
                     doWork(message);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -67,7 +67,7 @@ public class ReceiveLogsDirect {
     public static void doWork(String message) throws InterruptedException {
         for(char ch:message.toCharArray()){
             if(ch=='.'){
-                Thread.sleep(1000);
+                Thread.sleep(100);
             }
         }
     }
